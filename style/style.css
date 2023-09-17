@@ -1,0 +1,62 @@
+:root {
+  --box-size: 75px;
+}
+
+* {
+  font-size: 18px;
+  font-family: 'Inter', sans-serif;
+}
+
+.root {
+  display: flex;
+  justify-content: center;
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(var(--box-size) * 4);
+  height: 50%;
+  background-color: #a2bbcf;
+}
+
+.table .row {
+  display: flex;
+  box-sizing: border-box;
+}
+
+.table .row .btn {
+  width: calc(var(--box-size) * 1);
+  height: calc(var(--box-size) * 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 2px solid #142f44;
+}
+
+.table .row .btn.screen {
+  color: #e4a423;
+  background-color: #284e6c;
+}
+
+.table .row .btn.operator {
+  background-color: #b86262;
+}
+
+.table .row .btn.operator.clicked {
+  background-color: #f9836e;
+}
+
+.table .row .btn:hover {
+  background-color: #626974;
+}
+
+.table .row .btn.w2 {
+  width: calc(var(--box-size) * 2);
+}
+
+.table .row .btn.w4 {
+  width: calc(var(--box-size) * 4);
+}
