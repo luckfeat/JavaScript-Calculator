@@ -1,7 +1,7 @@
 let store = {
   first: '',
   second: '',
-  clickOperator: false,
+  clickedOperator: false,
   operatorSymbol: '',
   result: '',
 };
@@ -17,11 +17,11 @@ function getAllTag(selector) {
 }
 
 function calculate(operator) {
-  if (store.first !== '') {
-    store.clickOperator = true;
+  if (typeof store.first == 'number') {
+    store.clickedOperator = true;
   }
   if (operator === '=') {
-    store.clickOperator = false;
+    store.clickedOperator = false;
     switch (store.operatorSymbol) {
       case '/':
         if ((store.first !== '') & (store.second !== '')) {
@@ -49,11 +49,52 @@ function calculate(operator) {
         break;
       case '+':
         if ((store.first !== '') & (store.second !== '')) {
-          console.log('damn');
           screen.innerHTML = store.first + store.second;
           store.result = Number(store.first + store.second);
           store.first = store.result;
           store.second = '';
+        }
+        break;
+    }
+  } else if (
+    typeof store.first == 'number' &&
+    typeof store.second == 'number'
+  ) {
+    switch (store.operatorSymbol) {
+      case '/':
+        if (typeof store.first == 'number') {
+          store.result = Number(store.first / store.second);
+          screen.innerHTML = store.result;
+          store.first = store.result;
+          store.second = '';
+          store.operatorSymbol = operator;
+        }
+        break;
+      case '*':
+        if (typeof store.first == 'number') {
+          store.result = Number(store.first * store.second);
+          screen.innerHTML = store.result;
+          store.first = store.result;
+          store.second = '';
+          store.operatorSymbol = operator;
+        }
+        break;
+      case '-':
+        if (typeof store.first == 'number') {
+          store.result = Number(store.first - store.second);
+          screen.innerHTML = store.result;
+          store.first = store.result;
+          store.second = '';
+          store.operatorSymbol = operator;
+        }
+        break;
+      case '+':
+        if (typeof store.first == 'number') {
+          store.result = Number(store.first + store.second);
+          screen.innerHTML = store.result;
+          store.first = store.result;
+          store.second = '';
+          store.operatorSymbol = operator;
         }
         break;
     }
@@ -69,7 +110,7 @@ const numbers = getAllTag('.btn.number');
 const operators = getAllTag('.btn.operator');
 
 clear.addEventListener('click', () => {
-  if (!store.clickOperator) {
+  if (!store.clickedOperator) {
     store.first = '';
     screen.innerHTML = '';
   } else {
@@ -82,13 +123,15 @@ initialize.addEventListener('click', () => {
   store.first = '';
   store.second = '';
   screen.innerHTML = '';
-  store.clickOperator = false;
-  previousClick.classList.remove('clicked');
+  store.clickedOperator = false;
+  try {
+    previousClick.classList.remove('clicked');
+  } catch {}
 });
 
 numbers.forEach((number) => {
   number.addEventListener('click', (e) => {
-    if (!store.clickOperator) {
+    if (!store.clickedOperator) {
       store.first = Number((screen.innerHTML += e.target.innerHTML));
     } else {
       screen.innerHTML = Number((store.second += e.target.innerHTML));
