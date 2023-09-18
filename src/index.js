@@ -8,11 +8,65 @@ let store = {
 
 let result;
 
-const screen = document.querySelector('.screen');
-const clear = document.querySelector('.clear');
-const initialize = document.querySelector('.initialize');
-const numbers = document.querySelectorAll('.btn.number');
-const operators = document.querySelectorAll('.btn.operator');
+function getTag(selector) {
+  return document.querySelector(selector);
+}
+
+function getAllTag(selector) {
+  return document.querySelectorAll(selector);
+}
+
+function calculate(operator) {
+  if (store.first !== '') {
+    store.clickOperator = true;
+  }
+  if (operator === '=') {
+    store.clickOperator = false;
+    switch (store.operatorSymbol) {
+      case '/':
+        if ((store.first !== '') & (store.second !== '')) {
+          screen.innerHTML = store.first / store.second;
+          store.result = Number(store.first / store.second);
+          store.first = store.result;
+          store.second = '';
+        }
+        break;
+      case '*':
+        if ((store.first !== '') & (store.second !== '')) {
+          screen.innerHTML = store.first * store.second;
+          store.result = Number(store.first * store.second);
+          store.first = store.result;
+          store.second = '';
+        }
+        break;
+      case '-':
+        if ((store.first !== '') & (store.second !== '')) {
+          screen.innerHTML = store.first - store.second;
+          store.result = Number(store.first - store.second);
+          store.first = store.result;
+          store.second = '';
+        }
+        break;
+      case '+':
+        if ((store.first !== '') & (store.second !== '')) {
+          console.log('damn');
+          screen.innerHTML = store.first + store.second;
+          store.result = Number(store.first + store.second);
+          store.first = store.result;
+          store.second = '';
+        }
+        break;
+    }
+  } else {
+    store.operatorSymbol = operator;
+  }
+}
+
+const screen = getTag('.screen');
+const clear = getTag('.clear');
+const initialize = getTag('.initialize');
+const numbers = getAllTag('.btn.number');
+const operators = getAllTag('.btn.operator');
 
 clear.addEventListener('click', () => {
   if (!store.clickOperator) {
@@ -29,6 +83,7 @@ initialize.addEventListener('click', () => {
   store.second = '';
   screen.innerHTML = '';
   store.clickOperator = false;
+  previousClick.classList.remove('clicked');
 });
 
 numbers.forEach((number) => {
@@ -42,44 +97,20 @@ numbers.forEach((number) => {
   });
 });
 
+let previousClick;
+let clicked;
+
 operators.forEach((operator) => {
   operator.addEventListener('click', (e) => {
+    if (!clicked) {
+      previousClick = e.target;
+      e.target.classList.add('clicked');
+      clicked = true;
+    } else {
+      previousClick.classList.remove('clicked');
+      previousClick = e.target;
+      e.target.classList.add('clicked');
+    }
     calculate(e.target.innerHTML);
   });
 });
-
-function calculate(operator) {
-  store.clickOperator = true;
-  if (operator === '=') {
-    store.clickOperator = false;
-    switch (store.operatorSymbol) {
-      case '/':
-        screen.innerHTML = store.first / store.second;
-        store.result = Number(store.first / store.second);
-        store.first = store.result;
-        store.second = '';
-        console.log(store.result);
-        break;
-      case '*':
-        screen.innerHTML = store.first * store.second;
-        store.result = Number(store.first * store.second);
-        store.first = store.result;
-        store.second = '';
-        break;
-      case '-':
-        screen.innerHTML = store.first - store.second;
-        store.result = Number(store.first - store.second);
-        store.first = store.result;
-        store.second = '';
-        break;
-      case '+':
-        screen.innerHTML = store.first + store.second;
-        store.result = Number(store.first + store.second);
-        store.first = store.result;
-        store.second = '';
-        break;
-    }
-  } else {
-    store.operatorSymbol = operator;
-  }
-}
